@@ -1,132 +1,185 @@
 <template>
-  <div class="min-h-screen bg-pink-50 flex items-center justify-center p-4 font-sans overflow-hidden">
+  <!-- Main Background Container -->
+  <div class="min-h-screen w-full bg-gradient-to-br from-rose-100 via-purple-100 to-teal-100 flex items-center justify-center p-4 font-sans">
     
-    <!-- STEP 0: THE BIG QUESTION -->
-    <transition name="fade-slide" mode="out-in">
-      <div v-if="step === 0" key="step0" class="text-center">
-        <h1 class="text-4xl md:text-6xl font-bold text-pink-600 mb-8">
-          Will you go on a date with me? 🌹
+    <!-- Wrapper for all steps -->
+    <div class="w-full max-w-md lg:max-w-2xl">
+      
+      <!-- STEP 0: THE QUESTION (Runaway Button) -->
+      <div v-if="step === 0" class="text-center space-y-12 py-10">
+        <h1 class="text-5xl md:text-6xl font-black text-gray-800 tracking-tight">
+          Will you <br/> <span class="text-rose-500">go on a date?</span>
         </h1>
-        <div class="flex justify-center gap-6 items-center h-20">
+        
+        <div class="flex flex-wrap justify-center items-center gap-6 h-32 relative">
           <button 
             @click="nextStep"
-            class="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-full text-2xl shadow-lg transform transition hover:scale-110"
+            class="px-10 py-4 bg-rose-500 text-white rounded-full text-2xl font-bold shadow-lg shadow-rose-300 hover:scale-110 transition-transform active:scale-95"
           >
             Yes! ❤️
           </button>
-          
-          <!-- The "Runaway" Button -->
+
           <button 
-            @mousemove="moveButton"
-            @touchstart="moveButton"
-            class="absolute bg-gray-400 text-white px-6 py-2 rounded-full text-xl shadow-md transition-all duration-100"
+            @click="moveButton"
             :style="noButtonStyle"
+            class="px-10 py-4 bg-white text-gray-500 rounded-full text-2xl font-bold shadow-md transition-all duration-200 ease-out"
           >
             No
           </button>
         </div>
       </div>
 
-      <!-- STEP 1: DATE & TIME SELECTION -->
-      <div v-else-if="step === 1" key="step1" class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center">
-        <h2 class="text-2xl font-bold text-pink-500 mb-6">Pick a time! ⏰</h2>
-        <div class="grid grid-cols-2 gap-4 mb-8">
-          <button v-for="time in times" :key="time" @click="selectTime(time)"
-            class="p-3 border-2 border-pink-100 rounded-xl hover:border-pink-500 hover:bg-pink-50 transition">
+      <!-- STEP 1: TIME SELECTION -->
+      <div v-if="step === 1" class="space-y-6">
+        <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">Pick a time ⏰</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <button 
+            v-for="time in times" 
+            :key="time"
+            @click="selectTime(time)"
+            class="p-6 bg-white/60 backdrop-blur-md border border-white rounded-3xl text-xl font-semibold text-gray-700 shadow-sm hover:bg-rose-500 hover:text-white transition-all"
+          >
             {{ time }}
           </button>
         </div>
       </div>
 
       <!-- STEP 2: FOOD SELECTION -->
-      <div v-else-if="step === 2" key="step2" class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center">
-        <h2 class="text-2xl font-bold text-pink-500 mb-6">What are we eating? 😋</h2>
-        <div class="grid grid-cols-2 gap-4 mb-8">
-          <button v-for="food in foods" :key="food.name" @click="selectFood(food.name)"
-            class="flex flex-col items-center p-4 border-2 border-pink-100 rounded-xl hover:border-pink-500 hover:bg-pink-50 transition">
-            <span class="text-4xl mb-2">{{ food.icon }}</span>
-            <span class="font-medium">{{ food.name }}</span>
+      <div v-if="step === 2" class="space-y-6">
+        <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">What's the vibe? 😋</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <button 
+            v-for="food in foods" 
+            :key="food.id"
+            @click="selectFood(food)"
+            class="flex flex-col items-center justify-center p-6 bg-white/60 backdrop-blur-md border border-white rounded-[2rem] shadow-sm hover:bg-white hover:shadow-xl transition-all group"
+          >
+            <span class="text-4xl mb-2 group-hover:scale-125 transition-transform">{{ food.icon }}</span>
+            <span class="text-gray-700 font-bold">{{ food.name }}</span>
           </button>
         </div>
       </div>
 
-      <!-- STEP 3: FINAL CONFIRMATION -->
-      <div v-else-if="step === 3" key="step3" class="text-center">
-        <div class="text-8xl mb-6 animate-bounce">🎉</div>
-        <h1 class="text-4xl font-bold text-pink-600 mb-4">It's a Date!</h1>
-        <p class="text-xl text-gray-700">
-          I'll be there at <span class="font-bold text-pink-500">{{ selectedTime }}</span> <br>
-          to pick you up for <span class="font-bold text-pink-500">{{ selectedFood }}</span>!
-        </p>
-        <p class="mt-8 text-pink-400 animate-pulse">Can't wait to see you! ❤️</p>
-      </div>
-    </transition>
+      <!-- STEP 3: THE BENTO CONFIRMATION (Responsive Design) -->
+      <div v-if="step === 3" class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in zoom-in duration-500">
+        
+        <!-- Header (Spans Full Width) -->
+        <div class="md:col-span-2 bg-white/40 backdrop-blur-xl border border-white/50 rounded-[2.5rem] p-8 text-center shadow-xl shadow-rose-200/50">
+          <div class="text-5xl mb-4">🥳</div>
+          <h2 class="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-rose-500 to-purple-600">
+            It's a Date!
+          </h2>
+          <p class="text-rose-600/80 font-medium mt-2">See you very soon!</p>
+        </div>
 
+        <!-- Main Time Card (Large) -->
+        <div class="md:col-span-2 bg-white/40 backdrop-blur-xl border border-white/50 rounded-[2.5rem] p-8 text-center shadow-lg shadow-purple-200/40">
+          <p class="text-xs uppercase tracking-[0.2em] text-purple-500 font-bold mb-1">I'll be there at</p>
+          <div class="text-5xl md:text-6xl font-black text-gray-800 tracking-tight">
+            {{ arrivalTime }}
+          </div>
+          <div class="mt-4 inline-block px-4 py-1 bg-rose-500 text-white text-xs rounded-full font-medium animate-pulse">
+            Arriving 30m early! 🏃‍♂️💨
+          </div>
+        </div>
+
+        <!-- Food Card (Small Bento) -->
+        <div class="bg-white/40 backdrop-blur-xl border border-white/50 rounded-[2rem] p-6 text-center shadow-lg shadow-teal-200/40">
+          <div class="text-3xl mb-2">{{ selectedFood?.icon }}</div>
+          <p class="text-[10px] uppercase text-teal-600 font-bold">Food Vibe</p>
+          <p class="text-gray-700 font-bold">{{ selectedFood?.name }}</p>
+        </div>
+
+        <!-- Heart Card (Small Bento) -->
+        <div class="bg-white/40 backdrop-blur-xl border border-white/50 rounded-[2rem] p-6 text-center shadow-lg shadow-orange-200/40">
+          <div class="text-3xl mb-2">❤️</div>
+          <p class="text-[10px] uppercase text-orange-600 font-bold">Status</p>
+          <p class="text-gray-700 font-bold">Confirmed</p>
+        </div>
+
+        <!-- Reset Button (Spans Full Width) -->
+        <div class="md:col-span-2">
+          <button 
+            @click="step = 0" 
+            class="w-full py-4 bg-gray-800 text-white rounded-2xl font-bold shadow-lg hover:bg-black transition-all"
+          >
+            Restart Invite
+          </button>
+        </div>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from "vue";
 
 const step = ref(0);
-const selectedTime = ref('');
-const selectedFood = ref('');
+const selectedFood = ref(null);
+const selectedTime = ref(""); 
 
-// Data Options
-const times = ['6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM'];
-const foods = [
-  { id: 'kebab', label: 'Kebab', icon: '🍢' },      // Kebab
-  { id: 'icecream', label: 'Ice Cream Mix', icon: '🍨' }, // Bastani Maajoon
-  { id: 'chicken', label: 'Fried Chicken', icon: '🍗' }, // Morgh Soukhari
-  { id: 'sandwich', label: 'Sandwich', icon: '🥪' }    // Sandwich
-];
+// --- TIME CALCULATION LOGIC ---
+const arrivalTime = computed(() => {
+  if (!selectedTime.value) return "";
+  const dummyDate = new Date();
+  const match = selectedTime.value.match(/(\d+):(\d+)\s*(AM|PM)/i);
 
-// Runaway Button Logic
-const noButtonStyle = reactive({
-  position: 'relative',
-  left: '0px',
-  top: '0px'
+  if (!match) return "Invalid Time";
+
+  let [_, hours, minutes, period] = match;
+  hours = parseInt(hours, 10);
+  minutes = parseInt(minutes, 10);
+
+  if (period.toUpperCase() === "PM" && hours < 12) hours += 12;
+  else if (period.toUpperCase() === "AM" && hours === 12) hours = 0;
+
+  dummyDate.setHours(hours, minutes, 0, 0);
+  dummyDate.setMinutes(dummyDate.getMinutes() - 30);
+
+  return dummyDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 });
 
-const moveButton = (event) => {
-  // Calculate random position within a safe range
-  // This makes the button jump away when the cursor gets close
- const randomX = (Math.random() - 0.5) * 500; // Moves between -250px and 250px
-  const randomY = (Math.random() - 0.5) * 500; // Moves between -250px and 250px
-  
-  noButtonStyle.transform = `translate(${randomX}px, ${randomY}px)`;
+// --- DATA ---
+const times = ["6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM"];
+const foods = [
+  { id: "kebab", name: "Kebab", icon: "🍢" },
+  { id: "icecream", name: "Ice Cream Mix", icon: "🍨" },
+  { id: "chicken", name: "Fried Chicken", icon: "🍗" },
+  { id: "sandwich", name: "Sandwich", icon: "🥪" },
+];
+
+// --- UI LOGIC ---
+const noButtonStyle = reactive({
+  position: "relative",
+  transform: "translate(0px, 0px)",
+});
+
+const moveButton = () => {
+  // Use viewport-aware math so it doesn't fly off screen entirely
+  const x = (Math.random() - 0.5) * 200; 
+  const y = (Math.random() - 0.5) * 200;
+  noButtonStyle.transform = `translate(${x}px, ${y}px)`;
 };
 
-// Navigation Logic
-const nextStep = () => {
-  step.value++;
-};
-
+const nextStep = () => (step.value++);
 const selectTime = (time) => {
   selectedTime.value = time;
   nextStep();
 };
-
 const selectFood = (food) => {
   selectedFood.value = food;
   nextStep();
 };
 </script>
 
-<style scoped>
-/* Smooth transitions between steps */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.5s ease;
-}
-
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
+<style>
+/* Smooth transitions for all elements */
+* {
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 </style>
