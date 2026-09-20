@@ -1,5 +1,4 @@
 
-@import "tailwindcss";
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -296,3 +295,5 @@ code {
     border-right-color: var(--border);
   }
 }
+
+@import "tailwindcss";
