@@ -75,10 +75,10 @@ const selectedFood = ref('');
 // Data Options
 const times = ['6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM'];
 const foods = [
-  { name: 'Sushi', icon: '🍣' },
-  { name: 'Pizza', icon: '🍕' },
-  { name: 'Pasta', icon: '🍝' },
-  { name: 'Burgers', icon: '🍔' }
+  { id: 'kebab', label: 'Kebab', icon: '🍢' },      // Kebab
+  { id: 'icecream', label: 'Ice Cream Mix', icon: '🍨' }, // Bastani Maajoon
+  { id: 'chicken', label: 'Fried Chicken', icon: '🍗' }, // Morgh Soukhari
+  { id: 'sandwich', label: 'Sandwich', icon: '🥪' }    // Sandwich
 ];
 
 // Runaway Button Logic
